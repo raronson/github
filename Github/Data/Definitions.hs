@@ -5,6 +5,7 @@ module Github.Data.Definitions where
 import Data.Time
 import Data.Data
 import qualified Control.Exception as E
+import qualified Data.Map as M
 
 -- | Errors have been tagged according to their source, so you can more easily
 -- dispatch and handle them.
@@ -474,4 +475,14 @@ data DetailedOwner = DetailedUser {
   ,detailedOwnerId :: Int
   ,detailedOwnerHtmlUrl :: String
   ,detailedOwnerLogin :: String
+} deriving (Show, Data, Typeable, Eq, Ord)
+
+data Hook = Hook {
+   hookId :: Integer
+  ,hookConfig :: M.Map String String
+  ,hookActive :: Bool
+  ,hookEvents :: [String]
+  ,hookName :: String
+  ,hookCreatedAt :: GithubDate
+  ,hookUpdatedAt :: GithubDate
 } deriving (Show, Data, Typeable, Eq, Ord)

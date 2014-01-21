@@ -521,6 +521,16 @@ instance FromJSON DetailedOwner where
   parseJSON _ = fail "Could not build a DetailedOwner"
 
 
+instance FromJSON Hook where
+  parseJSON (Object o) = Hook <$> o .: "id"
+                              <*> o .: "config"
+                              <*> o .: "active"
+                              <*> o .: "events"
+                              <*> o .: "name"
+                              <*> o .: "created_at"
+                              <*> o .: "updated_at"
+  parseJSON _ = fail "Could not build a Hook"
+
 -- | A slightly more generic version of Aeson's @(.:?)@, using `mzero' instead
 -- of `Nothing'.
 (.:<) :: (FromJSON a) => Object -> T.Text -> Parser [a]

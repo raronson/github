@@ -133,6 +133,7 @@ Library
                    Github.Repos.Collaborators,
                    Github.Repos.Commits,
                    Github.Repos.Forks,
+                   Github.Repos.Hooks,
                    Github.Repos.Watching,
                    Github.Repos.Starring,
                    Github.Users,
