@@ -11,7 +11,6 @@ import Control.Applicative
 import Control.Monad
 import qualified Data.Text as T
 import Data.Aeson.Types
-import Data.Monoid
 import System.Locale (defaultTimeLocale)
 import qualified Data.Vector as V
 import qualified Data.HashMap.Lazy as Map
@@ -215,7 +214,7 @@ instance FromJSON Issue where
           <*> o .:? "assignee"
           <*> o .: "user"
           <*> o .: "title"
-          <*> o .: "pull_request"
+          <*> o .:? "pull_request"
           <*> o .: "url"
           <*> o .: "created_at"
           <*> o .: "body"
@@ -545,12 +544,12 @@ obj `values` key =
     parseJSON $ Array $ V.fromList $ Map.elems children
 
 -- | Produce the value for the last key by traversing.
-(<.:>) :: (FromJSON v, Monoid v) => Object => [T.Text] -> Parser v
-_obj <.:> [] = pure mempty
+(<.:>) :: (FromJSON v) => Object -> [T.Text] -> Parser v
 obj <.:> [key] = obj .: key
 obj <.:> (key:keys) =
   let (Object nextObj) = findWithDefault (Object Map.empty) key obj in
       nextObj <.:> keys
+_ <.:> [] = fail "must have a pair"
 
 -- | Produce the value for the given key, maybe.
 at :: Object -> T.Text -> Maybe Value
