@@ -19,7 +19,7 @@ tree user reqRepoName sha =
 -- | A recursively-nested tree for a SHA1.
 --
 -- > nestedTree "thoughtbot" "paperclip" "fe114451f7d066d367a1646ca7ac10e689b46844"
-nestedTree :: String -> String -> String -> IO (Either Error Tree)
-nestedTree user reqRepoName sha =
-  githubGetWithQueryString ["repos", user, reqRepoName, "git", "trees", sha]
+nestedTree :: Maybe GithubAuth -> String -> String -> String -> IO (Either Error Tree)
+nestedTree auth user reqRepoName sha =
+  githubGetWithQueryString' auth ["repos", user, reqRepoName, "git", "trees", sha]
                            "recursive=1"
