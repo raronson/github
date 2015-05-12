@@ -2,6 +2,7 @@
 -- <http://developer.github.com/v3/pulls/>.
 module Github.PullRequests (
  pullRequestsFor'
+,pullRequestsWith'
 ,pullRequest'
 ,pullRequestCommits'
 ,pullRequestFiles'
@@ -22,6 +23,14 @@ import Github.Private
 pullRequestsFor' :: Maybe GithubAuth -> String -> String -> IO (Either Error [PullRequest])
 pullRequestsFor' auth userName reqRepoName =
   githubGet' auth ["repos", userName, reqRepoName, "pulls"]
+
+-- | All pull requests for the repo, by owner and repo name.
+-- | With authentification
+--
+-- > pullRequestsWith' (Just ("github-username", "github-password")) "rails" "rails"
+pullRequestsWith' :: Maybe GithubAuth -> String -> String -> String -> IO (Either Error [PullRequest])
+pullRequestsWith' auth userName reqRepoName state =
+  githubGetWithQueryString' auth ["repos", userName, reqRepoName, "pulls"] ("state=" ++ state)
 
 -- | All pull requests for the repo, by owner and repo name.
 --
