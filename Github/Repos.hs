@@ -25,7 +25,9 @@ module Github.Repos (
 ,createRepo
 ,createOrganizationRepo
 ,newRepo
+,newOrgRepo
 ,NewRepo(..)
+,NewOrgRepo(..)
 
 -- ** Edit
 ,editRepo
@@ -187,8 +189,51 @@ instance ToJSON  NewRepo where
                   , "auto_init"           .= autoInit
                   ]
 
+data NewOrgRepo = NewOrgRepo {
+  newOrgRepoName         :: String
+, newOrgRepoDescription  :: (Maybe String)
+, newOrgRepoHomepage     :: (Maybe String)
+, newOrgRepoPrivate      :: (Maybe Bool)
+, newOrgRepoHasIssues    :: (Maybe Bool)
+, newOrgRepoHasWiki      :: (Maybe Bool)
+, newOrgRepoHasDownloads :: (Maybe Bool)
+, newOrgRepoTeamId       :: (Maybe Integer)
+, newOrgRepoAutoInit     :: (Maybe Bool)
+, newOrgRepoGitIgnore    :: (Maybe String)
+, newOrgRepoLicense      :: (Maybe String)
+} deriving Show
+
+instance ToJSON  NewOrgRepo where
+  toJSON (NewOrgRepo { newOrgRepoName         = name
+                     , newOrgRepoDescription  = description
+                     , newOrgRepoHomepage     = homepage
+                     , newOrgRepoPrivate      = private
+                     , newOrgRepoHasIssues    = hasIssues
+                     , newOrgRepoHasWiki      = hasWiki
+                     , newOrgRepoHasDownloads = hasDownloads
+                     , newOrgRepoTeamId       = teamId
+                     , newOrgRepoAutoInit     = autoInit
+                     , newOrgRepoGitIgnore    = gitIgnore
+                     , newOrgRepoLicense      = license
+                     }) = object
+                     [ "name"                .= name
+                     , "description"         .= description
+                     , "homepage"            .= homepage
+                     , "private"             .= private
+                     , "has_issues"          .= hasIssues
+                     , "has_wiki"            .= hasWiki
+                     , "has_downloads"       .= hasDownloads
+                     , "team_id"             .= teamId
+                     , "auto_init"           .= autoInit
+                     , "gitignore_template"  .= gitIgnore
+                     , "license"             .= license
+                     ]
+
 newRepo :: String -> NewRepo
 newRepo name = NewRepo name Nothing Nothing Nothing Nothing Nothing Nothing
+
+newOrgRepo :: String -> NewOrgRepo
+newOrgRepo name = NewOrgRepo name Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing
 
 -- |
 -- Create a new repository.
@@ -201,7 +246,7 @@ createRepo auth = githubPost auth ["user", "repos"]
 -- Create a new repository for an organization.
 --
 -- > createOrganizationRepo (GithubUser (user, password)) "thoughtbot" (newRepo "some_repo") {newRepoHasIssues = Just False}
-createOrganizationRepo :: GithubAuth -> String -> NewRepo -> IO (Either Error Repo)
+createOrganizationRepo :: GithubAuth -> String -> NewOrgRepo -> IO (Either Error Repo)
 createOrganizationRepo auth org = githubPost auth ["orgs", org, "repos"]
 
 data Edit = Edit {
