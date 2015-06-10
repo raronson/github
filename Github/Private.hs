@@ -57,6 +57,10 @@ githubPatch auth paths body =
             (Just auth)
             (Just body)
 
+githubPut auth paths = do
+  r  <- doHttps "PUT" (buildUrl paths) auth Nothing
+  return r
+
 buildUrl :: [String] -> String
 buildUrl paths = "https://api.github.com/" ++ intercalate "/" paths
 

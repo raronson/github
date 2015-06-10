@@ -4,6 +4,7 @@ module Github.Organizations (
 ,publicOrganizationsFor'
 ,publicOrganization
 ,publicOrganization'
+,addTeamToRepo
 ,module Github.Data
 ) where
 
@@ -33,3 +34,7 @@ publicOrganization' auth reqOrganizationName = githubGet' auth ["orgs", reqOrgan
 -- > publicOrganization "thoughtbot"
 publicOrganization :: String -> IO (Either Error Organization)
 publicOrganization = publicOrganization' Nothing
+
+-- PUT /teams/:id/repos/:org/:repo
+addTeamToRepo auth teamId orgName projectName = do
+  githubPut auth ["teams", show teamId, "repos", orgName, projectName]
