@@ -36,5 +36,6 @@ publicOrganization :: String -> IO (Either Error Organization)
 publicOrganization = publicOrganization' Nothing
 
 -- PUT /teams/:id/repos/:org/:repo
-addTeamToRepo auth teamId orgName projectName = do
-  githubPut auth ["teams", show teamId, "repos", orgName, projectName]
+--addTeamToRepo :: Int
+addTeamToRepo auth teamId orgName projectName permission = do
+  githubPutBody auth ["teams", show teamId, "repos", orgName, projectName] permission

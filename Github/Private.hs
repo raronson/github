@@ -57,8 +57,13 @@ githubPatch auth paths body =
             (Just auth)
             (Just body)
 
+
 githubPut auth paths = do
-  r  <- doHttps "PUT" (buildUrl paths) auth Nothing
+  r  <- doHttps "PUT" (buildUrl paths) (Just auth) Nothing
+  return r
+
+githubPutBody auth paths p = do
+  r  <- doHttps "PUT" (buildUrl paths) (Just auth) $ fmap (RequestBodyLBS . encode) p
   return r
 
 buildUrl :: [String] -> String

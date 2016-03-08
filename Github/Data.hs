@@ -4,7 +4,7 @@
 -- instances of @FromJSON@ to it. If you wish to use the data without the
 -- instances, use the @Github.Data.Definitions@ module instead.
 
-module Github.Data (module Github.Data.Definitions) where
+module Github.Data (module X) where
 
 import Data.Time
 import Control.Applicative
@@ -16,7 +16,8 @@ import qualified Data.Vector as V
 import qualified Data.HashMap.Lazy as Map
 import Data.Hashable (Hashable)
 
-import Github.Data.Definitions
+import Github.Data.Definitions as X
+import Github.Data.Teams as X
 
 instance FromJSON GithubDate where
   parseJSON (String t) =
