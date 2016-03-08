@@ -3,6 +3,7 @@
 module Github.Repos.Collaborators (
  collaboratorsOn
 ,isCollaboratorOn
+,removeCollaborator
 ,module Github.Data
 ) where
 
@@ -28,6 +29,17 @@ collaboratorsOn userName reqRepoName =
 isCollaboratorOn :: String -> String -> String -> IO (Either Error Bool)
 isCollaboratorOn userName repoOwnerName reqRepoName = do
    result <- doHttps (pack "GET")
+                     (buildUrl ["repos", repoOwnerName, reqRepoName, "collaborators", userName])
+                     Nothing
+                     Nothing
+   return $ either (Left . HTTPConnectionError)
+                   (Right . (204 ==) . T.statusCode . C.responseStatus)
+                   result
+
+
+removeCollaborator :: String -> String -> String -> IO (Either Error Bool)
+removeCollaborator userName repoOwnerName reqRepoName = do
+   result <- doHttps (pack "DELETE")
                      (buildUrl ["repos", repoOwnerName, reqRepoName, "collaborators", userName])
                      Nothing
                      Nothing
