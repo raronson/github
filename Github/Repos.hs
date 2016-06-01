@@ -302,7 +302,7 @@ deleteRepo :: GithubAuth
            -> String      -- ^ repository name
            -> IO (Either Error ())
 deleteRepo auth owner repo = do
-  result <- doHttps "DELETE" url (Just auth) Nothing
+  result <- doHttps "DELETE" Nothing url (Just auth) Nothing
   case result of
       Left e -> return (Left (HTTPConnectionError e))
       Right resp ->

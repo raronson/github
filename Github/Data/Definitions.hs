@@ -265,7 +265,7 @@ data EventType =
   | Referenced    -- ^ The issue was referenced from a commit message. The commit_id attribute is the commit SHA1 of where that happened.
   | Merged        -- ^ The issue was merged by the actor. The commit_id attribute is the SHA1 of the HEAD commit that was merged.
   | Assigned      -- ^ The issue was assigned to the actor.
-  | Closed        -- ^ The issue was closed by the actor. When the commit_id is present, it identifies the commit that closed the issue using “closes / fixes #NN” syntax. 
+  | Closed        -- ^ The issue was closed by the actor. When the commit_id is present, it identifies the commit that closed the issue using “closes / fixes #NN” syntax.
   | Reopened      -- ^ The issue was reopened by the actor.
   deriving (Show, Data, Typeable, Eq, Ord)
 
@@ -487,3 +487,35 @@ data Hook = Hook {
   ,hookCreatedAt :: GithubDate
   ,hookUpdatedAt :: GithubDate
 } deriving (Show, Data, Typeable, Eq, Ord)
+
+data Protection =
+  Protection {
+      requiredStatusChecks :: Maybe RequiredStatusChecks
+    , pushRestrictions :: Maybe PushRestrictions
+    } deriving (Show, Data, Typeable, Eq, Ord)
+
+data RequiredStatusChecks =
+  RequiredStatusChecks {
+      enforcementLevel :: EnforcementLevel
+    , strict :: Bool
+    , context :: [String]
+    } deriving (Show, Data, Typeable, Eq, Ord)
+
+data EnforcementLevel =
+    Everyone
+  | NotAdmins
+    deriving (Show, Data, Typeable, Eq, Ord)
+
+data PushRestrictions =
+    PushRestrictions [User] [Team]
+    deriving (Show, Data, Typeable, Eq, Ord)
+
+newtype User =
+  User {
+      user :: String
+    } deriving (Show, Data, Typeable, Eq, Ord)
+
+newtype Team =
+  Team {
+      team :: String
+    } deriving (Show, Data, Typeable, Eq, Ord)
