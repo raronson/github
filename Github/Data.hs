@@ -6,12 +6,12 @@
 
 module Github.Data (module X) where
 
-import Data.Time
-import Control.Applicative
+import Data.Time (parseTime, defaultTimeLocale)
+
 import Control.Monad
 import qualified Data.Text as T
 import Data.Aeson.Types
-import System.Locale (defaultTimeLocale)
+
 import qualified Data.Vector as V
 import qualified Data.HashMap.Lazy as Map
 import Data.Hashable (Hashable)
@@ -432,8 +432,8 @@ instance FromJSON Repo where
          <*> o .:? "has_wiki"
          <*> o .:? "has_issues"
          <*> o .:? "has_downloads"
-	 <*> o .:? "parent"
-	 <*> o .:? "source"
+         <*> o .:? "parent"
+         <*> o .:? "source"
   parseJSON _ = fail "Could not build a Repo"
 
 instance FromJSON RepoRef where

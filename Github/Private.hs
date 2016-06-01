@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, StandaloneDeriving, DeriveDataTypeable #-}
+{-# LANGUAGE OverloadedStrings, StandaloneDeriving, DeriveDataTypeable, FlexibleContexts #-}
 {-# LANGUAGE CPP #-}
 module Github.Private where
 
@@ -7,7 +7,6 @@ import Data.Aeson
 import Data.Attoparsec.ByteString.Lazy
 import Data.Data
 import Data.Monoid
-import Control.Applicative
 import Data.List
 import Data.CaseInsensitive (mk)
 import qualified Data.ByteString.Char8 as BS
