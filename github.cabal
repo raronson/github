@@ -152,7 +152,7 @@ Library
                  containers,
                  hashable,
                  text,
-                 old-locale,
+                 time-locale-compat == 0.1.*,
                  HTTP,
                  network,
                  http-conduit >= 1.8,

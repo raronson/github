@@ -6,7 +6,8 @@
 
 module Github.Data (module X) where
 
-import Data.Time (parseTime, defaultTimeLocale)
+import Data.Time (parseTime)
+import Data.Time.Locale.Compat (defaultTimeLocale)
 
 import Control.Monad
 import qualified Data.Text as T
