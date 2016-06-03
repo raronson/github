@@ -3,6 +3,8 @@
 module Github.Private where
 
 import Github.Data
+
+import Control.Applicative
 import Data.Aeson
 import Data.Attoparsec.ByteString.Lazy
 import Data.Data
@@ -13,6 +15,9 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import Network.HTTP.Types (Status(..))
 import Network.HTTP.Conduit
+
+import Prelude
+
 -- import Data.Conduit (ResourceT)
 import qualified Control.Exception as E
 import Data.Maybe (fromMaybe)

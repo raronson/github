@@ -6,6 +6,8 @@
 
 module Github.Data (module X) where
 
+import Control.Applicative
+
 import Data.Time (parseTime)
 import Data.Time.Locale.Compat (defaultTimeLocale)
 
@@ -19,6 +21,8 @@ import Data.Hashable (Hashable)
 
 import Github.Data.Definitions as X
 import Github.Data.Teams as X
+
+import Prelude
 
 instance FromJSON GithubDate where
   parseJSON (String t) =
