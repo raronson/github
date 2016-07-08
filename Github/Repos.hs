@@ -104,7 +104,7 @@ organizationRepo = organizationRepo' Nothing
 --
 -- > organizationRepo (Just (GithubUser (user, password))) "thoughtbot" "github"
 organizationRepo' :: Maybe GithubAuth -> String -> String -> IO (Either Error Repo)
-organizationRepo' auth orgName reqRepoName = githubGet' auth ["orgs", orgName, reqRepoName]
+organizationRepo' auth orgName reqRepoName = githubGet' auth ["repos", orgName, reqRepoName]
 
 -- | Details on a specific repo, given the owner and repo name.
 --
