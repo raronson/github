@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE CPP #-}
 -- | The Github Repos API, as documented at
 -- <http://developer.github.com/v3/repos/>
 module Github.Repos (
@@ -316,9 +315,7 @@ deleteRepo auth owner repo = do
              then return (Left (HTTPConnectionError
                                 (E.toException
                                  (StatusCodeException status headers
-#if MIN_VERSION_http_conduit(1, 9, 0)
                                  (responseCookieJar resp)
-#endif
                                  ))))
              else return (Right ())
   where

@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings, StandaloneDeriving, DeriveDataTypeable, FlexibleContexts #-}
-{-# LANGUAGE CPP #-}
 module Github.Private where
 
 import Github.Data
@@ -151,17 +150,9 @@ doHttps reqMethod url auth body = do
                                      BS.pack ("token " ++ token))]
     getOAuth _ = []
     getResponse request = withManager $ \manager -> httpLbs request manager
-#if MIN_VERSION_http_conduit(1, 9, 0)
     successOrMissing s@(Status sci _) hs cookiejar
-#else
-    successOrMissing s@(Status sci _) hs
-#endif
       | (200 <= sci && sci < 300) || sci == 404 = Nothing
-#if MIN_VERSION_http_conduit(1, 9, 0)
       | otherwise = Just $ E.toException $ StatusCodeException s hs cookiejar
-#else
-      | otherwise = Just $ E.toException $ StatusCodeException s hs
-#endif
 
 parseJsonRaw :: LBS.ByteString -> Either Error Value
 parseJsonRaw jsonString =
