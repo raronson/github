@@ -8,7 +8,7 @@ module Github.Data (module X) where
 
 import Control.Applicative
 
-import Data.Time (parseTime)
+import Data.Time.Format (parseTimeM)
 import Data.Time.Locale.Compat (defaultTimeLocale)
 
 import Control.Monad
@@ -26,7 +26,7 @@ import Prelude
 
 instance FromJSON GithubDate where
   parseJSON (String t) =
-    case parseTime defaultTimeLocale "%FT%T%Z" (T.unpack t) of
+    case parseTimeM True defaultTimeLocale "%FT%T%Z" (T.unpack t) of
          Just d -> pure $ GithubDate d
          _      -> fail "could not parse Github datetime"
   parseJSON _          = fail "Given something besides a String"
