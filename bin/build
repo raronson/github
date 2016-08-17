@@ -9,4 +9,4 @@ export PATH=$GHC_PATH:$PATH
 CABAL_PATH=$(cabal-path)
 export PATH=$CABAL_PATH:$PATH
 
-./mafia build -- --ghc-options=-Wall
+./mafia build -w
