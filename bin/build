@@ -1,0 +1,12 @@
+#!/bin/sh -euvx
+
+export GHC_VERSION="7.10.2"
+export CABAL_VERSION = "1.22.4.0"
+
+
+GHC_PATH=$(ghc-path)
+export PATH=$GHC_PATH:$PATH
+CABAL_PATH=$(cabal-path)
+export PATH=$CABAL_PATH:$PATH
+
+./mafia build -- --ghc-options=-Wall
