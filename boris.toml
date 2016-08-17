@@ -2,7 +2,7 @@
   version = 1
 
 [build.dist]
-  command = [["./mafia", "build", "--", "-ghc-options=-Wall]]
+  command = [["./mafia", "build", "--", "-ghc-options=-Wall"]]
 
 [build.branches]
-  command = [["./mafia", "build", "--", "-ghc-options=-Wall]]
+  command = [["./mafia", "build", "--", "-ghc-options=-Wall"]]
