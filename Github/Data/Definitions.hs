@@ -507,7 +507,7 @@ data EnforcementLevel =
     deriving (Show, Data, Typeable, Eq, Ord)
 
 data PushRestrictions =
-    PushRestrictions [User] [Team]
+    PushRestrictions [User] [TeamName]
     deriving (Show, Data, Typeable, Eq, Ord)
 
 newtype User =
@@ -515,7 +515,7 @@ newtype User =
       user :: String
     } deriving (Show, Data, Typeable, Eq, Ord)
 
-newtype Team =
-  Team {
+newtype TeamName =
+  TeamName {
       team :: String
     } deriving (Show, Data, Typeable, Eq, Ord)
