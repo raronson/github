@@ -72,6 +72,10 @@ githubPutBody auth paths p = do
   r  <- doHttps "PUT" Nothing (buildUrl paths) (Just auth) $ fmap (RequestBodyLBS . encode) p
   return r
 
+githubPutBodyMedia auth paths m p = do
+  r  <- doHttps "PUT" m (buildUrl paths) (Just auth) $ fmap (RequestBodyLBS . encode) p
+  return r
+
 buildUrl :: [String] -> String
 buildUrl paths = "https://api.github.com/" ++ intercalate "/" paths
 
