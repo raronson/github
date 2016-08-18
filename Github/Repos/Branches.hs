@@ -18,10 +18,12 @@ import qualified Network.HTTP.Types as T (statusCode)
 -- https://developer.github.com/v3/repos/branches/#update-branch-protection
 --protect :: GithubAuth -> String -> String -> String -> Protection -> IO (Either SomeException ())
 protect auth userName reqRepoName branch protection = do
-  githubPutBody
+  githubPutBodyMedia
     auth
     ["repos", userName, reqRepoName, "branches", branch, "protection"]
+    (Just "application/vnd.github.loki-preview+json")
     protection
+
 
 instance ToJSON Protection where
   toJSON (Protection r p) =
