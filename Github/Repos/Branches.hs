@@ -2,6 +2,7 @@
 -- | The repo starring API as described on
 -- <http://developer.github.com/v3/repos/hooks/>.
 module Github.Repos.Branches (
+    protect
   ) where
 
 import           Data.Aeson
