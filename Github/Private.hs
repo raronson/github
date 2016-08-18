@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings, StandaloneDeriving, DeriveDataTypeable, FlexibleContexts #-}
-{-# LANGUAGE CPP #-}
 module Github.Private where
 
 import Github.Data
@@ -33,6 +32,7 @@ githubGet = githubGet' Nothing
 githubGet' :: (FromJSON b, Show b) => Maybe GithubAuth -> [String] -> IO (Either Error b)
 githubGet' auth paths =
   githubAPI (BS.pack "GET")
+            Nothing
             (buildUrl paths)
             auth
             (Nothing :: Maybe Value)
@@ -43,6 +43,7 @@ githubGetWithQueryString = githubGetWithQueryString' Nothing
 githubGetWithQueryString' :: (FromJSON b, Show b) => Maybe GithubAuth -> [String] -> String -> IO (Either Error b)
 githubGetWithQueryString' auth paths qs =
   githubAPI (BS.pack "GET")
+            Nothing
             (buildUrl paths ++ "?" ++ qs)
             auth
             (Nothing :: Maybe Value)
@@ -50,6 +51,7 @@ githubGetWithQueryString' auth paths qs =
 githubPost :: (ToJSON a, Show a, FromJSON b, Show b) => GithubAuth -> [String] -> a -> IO (Either Error b)
 githubPost auth paths body =
   githubAPI (BS.pack "POST")
+            Nothing
             (buildUrl paths)
             (Just auth)
             (Just body)
@@ -57,26 +59,26 @@ githubPost auth paths body =
 githubPatch :: (ToJSON a, Show a, FromJSON b, Show b) => GithubAuth -> [String] -> a -> IO (Either Error b)
 githubPatch auth paths body =
   githubAPI (BS.pack "PATCH")
+            Nothing
             (buildUrl paths)
             (Just auth)
             (Just body)
 
-
 githubPut auth paths = do
-  r  <- doHttps "PUT" (buildUrl paths) (Just auth) Nothing
+  r  <- doHttps "PUT" Nothing (buildUrl paths) (Just auth) Nothing
   return r
 
 githubPutBody auth paths p = do
-  r  <- doHttps "PUT" (buildUrl paths) (Just auth) $ fmap (RequestBodyLBS . encode) p
+  r  <- doHttps "PUT" Nothing (buildUrl paths) (Just auth) $ fmap (RequestBodyLBS . encode) p
   return r
 
 buildUrl :: [String] -> String
 buildUrl paths = "https://api.github.com/" ++ intercalate "/" paths
 
-githubAPI :: (ToJSON a, Show a, FromJSON b, Show b) => BS.ByteString -> String
+githubAPI :: (ToJSON a, Show a, FromJSON b, Show b) => BS.ByteString -> Maybe BS.ByteString -> String
           -> Maybe GithubAuth -> Maybe a -> IO (Either Error b)
-githubAPI apimethod url auth body = do
-  result <- doHttps apimethod url auth (encodeBody body)
+githubAPI apimethod mversion url auth body = do
+  result <- doHttps apimethod mversion url auth (encodeBody body)
   case result of
       Left e     -> return (Left (HTTPConnectionError e))
       Right resp -> either Left (\x -> jsonResultToE (LBS.pack (show x))
@@ -107,7 +109,7 @@ githubAPI apimethod url auth body = do
                              nextJson <- handleBody nextResp
                              return $ (\(Array x) -> Array (ary <> x))
                                           <$> nextJson)
-                       =<< doHttps apimethod nu auth Nothing
+                       =<< doHttps apimethod mversion nu auth Nothing
     handleJson _ gotjson = return (Right gotjson)
 
     getNextUrl l =
@@ -117,13 +119,14 @@ githubAPI apimethod url auth body = do
              in Just (Data.List.takeWhile (/= '>') s')
         else Nothing
 
--- doHttps :: Method -> String -> Maybe GithubAuth
+-- doHttps :: Method -> Maybe ByteString -> String -> Maybe GithubAuth
 --         -> Maybe (RequestBody (ResourceT IO))
 --         -> IO (Either E.SomeException (Response LBS.ByteString))
-doHttps reqMethod url auth body = do
+doHttps reqMethod mversion url auth body = do
   let reqBody = fromMaybe (RequestBodyBS $ BS.pack "") body
       reqHeaders = maybe [] getOAuth auth
       Just uri = parseUrl url
+      version = maybe "application/vnd.github.preview" id mversion
       request = uri { method = reqMethod
                     , secure = True
                     , port = 443
@@ -131,7 +134,7 @@ doHttps reqMethod url auth body = do
                     , responseTimeout = Just 20000000
                     , requestHeaders = reqHeaders <>
                                        [("User-Agent", "github.hs/0.7.4")]
-                                       <> [("Accept", "application/vnd.github.preview")]
+                                       <> [("Accept", version)]
                     , checkStatus = successOrMissing
                     }
       authRequest = getAuthRequest auth request
@@ -151,17 +154,9 @@ doHttps reqMethod url auth body = do
                                      BS.pack ("token " ++ token))]
     getOAuth _ = []
     getResponse request = withManager $ \manager -> httpLbs request manager
-#if MIN_VERSION_http_conduit(1, 9, 0)
     successOrMissing s@(Status sci _) hs cookiejar
-#else
-    successOrMissing s@(Status sci _) hs
-#endif
       | (200 <= sci && sci < 300) || sci == 404 = Nothing
-#if MIN_VERSION_http_conduit(1, 9, 0)
       | otherwise = Just $ E.toException $ StatusCodeException s hs cookiejar
-#else
-      | otherwise = Just $ E.toException $ StatusCodeException s hs
-#endif
 
 parseJsonRaw :: LBS.ByteString -> Either Error Value
 parseJsonRaw jsonString =

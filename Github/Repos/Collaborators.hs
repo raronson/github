@@ -29,6 +29,7 @@ collaboratorsOn userName reqRepoName =
 isCollaboratorOn :: String -> String -> String -> IO (Either Error Bool)
 isCollaboratorOn userName repoOwnerName reqRepoName = do
    result <- doHttps (pack "GET")
+                     Nothing
                      (buildUrl ["repos", repoOwnerName, reqRepoName, "collaborators", userName])
                      Nothing
                      Nothing
@@ -40,6 +41,7 @@ isCollaboratorOn userName repoOwnerName reqRepoName = do
 removeCollaborator :: String -> String -> String -> IO (Either Error Bool)
 removeCollaborator userName repoOwnerName reqRepoName = do
    result <- doHttps (pack "DELETE")
+                     Nothing
                      (buildUrl ["repos", repoOwnerName, reqRepoName, "collaborators", userName])
                      Nothing
                      Nothing
