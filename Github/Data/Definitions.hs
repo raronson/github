@@ -371,6 +371,11 @@ data SearchReposResult = SearchReposResult {
   ,searchReposRepos :: [ Repo ]
 } deriving (Show, Data, Typeable, Eq, Ord)
 
+data SearchIssuesResult = SearchIssuesResult {
+  searchIssuesTotalCount :: Int
+  ,searchIssuesIssues :: [ Issue ]
+} deriving (Show, Data, Typeable, Eq, Ord)
+
 data Repo = Repo {
    repoSshUrl :: String
   ,repoDescription :: Maybe String
