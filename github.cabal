@@ -156,7 +156,7 @@ Library
                  time-locale-compat == 0.1.*,
                  HTTP,
                  network,
-                 http-conduit >= 1.9,
+                 http-conduit >= 1.9 && < 2.2,
                  conduit,
                  failure,
                  http-types,
