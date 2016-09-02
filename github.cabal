@@ -124,6 +124,7 @@ Library
                    Github.GitData.Trees,
                    Github.GitData.Blobs,
                    Github.Issues,
+                   Github.Issues.Assignees,
                    Github.Issues.Comments,
                    Github.Issues.Events,
                    Github.Issues.Labels,
