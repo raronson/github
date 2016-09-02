@@ -37,3 +37,26 @@ labelsOnMilestone user reqRepoName milestoneId =
 label :: String -> String -> String -> IO (Either Error IssueLabel)
 label user reqRepoName reqLabelName =
   githubGet ["repos", user, reqRepoName, "labels", reqLabelName]
+
+-- https://developer.github.com/v3/issues/labels/#create-a-label
+createLabel :: GithubAuth -> String -> String -> NewLabel -> IO (Either Error IssueLabel)
+createLabel auth user reqRepoName label =
+  githubPost auth ["repos", user, reqRepoName, "labels"] label
+
+-- https://developer.github.com/v3/issues/labels/#add-labels-to-an-issue
+applyLabels :: GithubAuth -> String -> String -> String -> [String] -> IO (Either Error [IssueLabel])
+applyLabels auth user reqRepoName issueNumber l =
+  githubPost auth ["repos", user, reqRepoName, "issues", issueNumber, "labels"] l
+
+listLabels :: GithubAuth -> String -> String -> String -> String -> IO (Either Error [IssueLabel])
+listLabels auth user reqRepoName issueNumber l =
+  githubGet' (Just auth) ["repos", user, reqRepoName, "issues", issueNumber, "labels"]
+
+-- https://developer.github.com/v3/issues/labels/#remove-a-label-from-an-issue
+--removeLabels :: GithubAuth -> String -> String -> String -> String -> IO (Either SomeException (Response LBS.ByteString))
+removeLabels auth user reqRepoName issueNumber l =
+  githubDelete auth ["repos", user, reqRepoName, "issues", issueNumber, "labels", l]
+
+--removeAllLabels :: GithubAuth -> String -> String -> String -> IO (Either SomeException (Response LBS.ByteString))
+removeAllLabels auth user reqRepoName issueNumber =
+  githubDelete auth ["repos", user, reqRepoName, "issues", issueNumber, "labels"]

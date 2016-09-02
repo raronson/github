@@ -56,6 +56,10 @@ githubPost auth paths body =
             (Just auth)
             (Just body)
 
+githubDelete auth paths = do
+  r <- doHttps "DELETE" Nothing (buildUrl paths) (Just auth) Nothing
+  return r
+
 githubPatch :: (ToJSON a, Show a, FromJSON b, Show b) => GithubAuth -> [String] -> a -> IO (Either Error b)
 githubPatch auth paths body =
   githubAPI (BS.pack "PATCH")

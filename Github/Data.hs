@@ -134,6 +134,13 @@ instance ToJSON NewComment where
 instance ToJSON EditComment where
   toJSON (EditComment b) = object [ "body" .= b ]
 
+instance ToJSON NewLabel where
+  toJSON (NewLabel n c) =
+    object [
+        "name" .= n
+      , "color" .= c
+      ]
+
 instance FromJSON Diff where
   parseJSON (Object o) =
     Diff <$> o .: "status"

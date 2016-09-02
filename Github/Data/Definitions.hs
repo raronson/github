@@ -524,3 +524,10 @@ newtype TeamName =
   TeamName {
       team :: String
     } deriving (Show, Data, Typeable, Eq, Ord)
+
+-- https://developer.github.com/v3/issues/labels/#create-a-label
+data NewLabel =
+  NewLabel {
+      newLabelName :: String
+    , newLabelColor :: String
+    } deriving (Show, Data, Typeable, Eq, Ord)
