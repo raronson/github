@@ -134,6 +134,24 @@ instance ToJSON NewComment where
 instance ToJSON EditComment where
   toJSON (EditComment b) = object [ "body" .= b ]
 
+instance ToJSON NewLabel where
+  toJSON (NewLabel n c) =
+    object [
+        "name" .= n
+      , "color" .= c
+      ]
+
+instance ToJSON Assignees where
+  toJSON (Assignees as) =
+    object [
+        "assignees" .= toJSON as
+      ]
+
+instance FromJSON Assignee where
+  parseJSON (Object o) =
+    Assignee
+      <$> o .: "login"
+
 instance FromJSON Diff where
   parseJSON (Object o) =
     Diff <$> o .: "status"
