@@ -6,6 +6,11 @@ module Github.Issues.Labels (
 ,labelsOnRepo'
 ,labelsOnIssue
 ,labelsOnMilestone
+,createLabel
+,applyLabels
+,listLabels
+,removeLabels
+,removeAllLabels
 ,module Github.Data
 ) where
 
