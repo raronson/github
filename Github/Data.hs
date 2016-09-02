@@ -141,6 +141,17 @@ instance ToJSON NewLabel where
       , "color" .= c
       ]
 
+instance ToJSON Assignees where
+  toJSON (Assignees as) =
+    object [
+        "assignees" .= toJSON as
+      ]
+
+instance FromJSON Assignee where
+  parseJSON (Object o) =
+    Assignee
+      <$> o .: "login"
+
 instance FromJSON Diff where
   parseJSON (Object o) =
     Diff <$> o .: "status"
