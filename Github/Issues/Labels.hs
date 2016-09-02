@@ -17,6 +17,10 @@ import Github.Private
 labelsOnRepo :: String -> String -> IO (Either Error [IssueLabel])
 labelsOnRepo user reqRepoName = githubGet ["repos", user, reqRepoName, "labels"]
 
+labelsOnRepo' :: GithubAuth -> String -> String -> IO (Either Error [IssueLabel])
+labelsOnRepo' auth user reqRepoName =
+  githubGet' (Just auth) ["repos", user, reqRepoName, "labels"]
+
 -- | The labels on an issue in a repo.
 --
 -- > labelsOnIssue "thoughtbot" "paperclip" 585
