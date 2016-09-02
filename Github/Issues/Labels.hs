@@ -3,6 +3,7 @@
 module Github.Issues.Labels (
  label
 ,labelsOnRepo
+,labelsOnRepo'
 ,labelsOnIssue
 ,labelsOnMilestone
 ,module Github.Data
