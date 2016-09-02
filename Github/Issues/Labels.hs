@@ -58,8 +58,8 @@ applyLabels :: GithubAuth -> String -> String -> String -> [String] -> IO (Eithe
 applyLabels auth user reqRepoName issueNumber l =
   githubPost auth ["repos", user, reqRepoName, "issues", issueNumber, "labels"] l
 
-listLabels :: GithubAuth -> String -> String -> String -> String -> IO (Either Error [IssueLabel])
-listLabels auth user reqRepoName issueNumber l =
+listLabels :: GithubAuth -> String -> String -> String -> IO (Either Error [IssueLabel])
+listLabels auth user reqRepoName issueNumber =
   githubGet' (Just auth) ["repos", user, reqRepoName, "issues", issueNumber, "labels"]
 
 -- https://developer.github.com/v3/issues/labels/#remove-a-label-from-an-issue
