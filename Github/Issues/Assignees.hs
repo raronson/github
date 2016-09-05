@@ -14,10 +14,10 @@ listAssignees :: GithubAuth -> String -> String -> IO (Either Error [Assignee])
 listAssignees auth user reqRepoName =
   githubGet' (Just auth) ["repos", user, reqRepoName, "assignees"]
 
-addAssignee :: GithubAuth -> String -> String -> String -> Assignees -> IO (Either Error ())
+addAssignee :: GithubAuth -> String -> String -> String -> Assignees -> IO (Either Error Issue)
 addAssignee auth user reqRepoName issueNumber assignees =
   githubPost auth ["repos", user, reqRepoName, "issues", issueNumber, "assignees"] assignees
 
-removeAssignee :: GithubAuth -> String -> String -> String -> Assignees -> IO (Either Error ())
+removeAssignee :: GithubAuth -> String -> String -> String -> Assignees -> IO (Either Error Issue)
 removeAssignee auth user reqRepoName issueNumber assignees =
   githubDeleteBody auth ["repos", user, reqRepoName, "issues", issueNumber, "assignees"] assignees
