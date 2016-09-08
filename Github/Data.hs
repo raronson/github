@@ -560,6 +560,14 @@ instance FromJSON Hook where
                               <*> o .: "updated_at"
   parseJSON _ = fail "Could not build a Hook"
 
+instance FromJSON Team where
+  parseJSON (Object o) =
+    Team
+      <$> (TeamName <$> o .: "name")
+      <*> o .: "id"
+  parseJSON _ =
+    fail "Could not build a Team"
+
 -- | A slightly more generic version of Aeson's @(.:?)@, using `mzero' instead
 -- of `Nothing'.
 (.:<) :: (FromJSON a) => Object -> T.Text -> Parser [a]
