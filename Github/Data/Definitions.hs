@@ -520,6 +520,12 @@ newtype User =
       user :: String
     } deriving (Show, Data, Typeable, Eq, Ord)
 
+data Team =
+  Team {
+      teamName :: TeamName
+    , teamId :: Integer
+    } deriving (Show, Data, Typeable, Eq, Ord)
+
 newtype TeamName =
   TeamName {
       team :: String

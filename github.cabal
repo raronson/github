@@ -131,6 +131,7 @@ Library
                    Github.Issues.Milestones,
                    Github.Organizations,
                    Github.Organizations.Members,
+                   Github.Organizations.Teams,
                    Github.PullRequests,
                    Github.Repos,
                    Github.Repos.Branches,
