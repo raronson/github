@@ -9,6 +9,8 @@ import Data.Attoparsec.ByteString.Lazy
 import Data.Data
 import Data.Monoid
 import Data.List
+import qualified Data.Text as T
+import Data.Tuple (swap)
 import Data.CaseInsensitive (mk)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as LBS
@@ -128,12 +130,13 @@ githubAPI apimethod mversion url auth body = do
                        =<< doHttps apimethod mversion nu auth Nothing
     handleJson _ gotjson = return (Right gotjson)
 
-    getNextUrl l =
-        if "rel=\"next\"" `isInfixOf` l
-        then let s  = l
-                 s' = Data.List.tail $ Data.List.dropWhile (/= '<') s
-             in Just (Data.List.takeWhile (/= '>') s')
-        else Nothing
+getNextUrl :: String -> Maybe String
+getNextUrl =
+  let
+    p =
+      T.takeWhile (/= '>') . T.tail . T.dropWhile (/= '<')
+  in
+    fmap (T.unpack . p) . lookup "rel=\"next\"" . fmap (swap . fmap (T.strip . T.drop 1) . T.breakOn ";") . T.splitOn "," . T.pack
 
 -- doHttps :: Method -> Maybe ByteString -> String -> Maybe GithubAuth
 --         -> Maybe (RequestBody (ResourceT IO))
